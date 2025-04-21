@@ -1,0 +1,305 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUANTUM CLASSIFIER</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Chakra+Petch:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --quantum-blue: #00f7ff;
+            --neon-pink: #ff00ff;
+            --dark-matter: #0b0b15;
+        }
+
+        body {
+            background: var(--dark-matter);
+            color: var(--quantum-blue);
+            font-family: 'Space Grotesk', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .quantum-field {
+            background: radial-gradient(circle at 50% 50%, 
+                rgba(0, 247, 255, 0.05) 0%,
+                rgba(0, 247, 255, 0) 70%);
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .quantum-field:hover {
+            transform: perspective(1000px) rotateX(5deg) rotateY(5deg);
+            box-shadow: 0 0 50px rgba(0, 247, 255, 0.2);
+        }
+
+        .neon-pulse {
+            animation: neon-pulse 1.5s infinite alternate;
+        }
+
+        @keyframes neon-pulse {
+            0% { filter: drop-shadow(0 0 2px var(--quantum-blue)); }
+            100% { filter: drop-shadow(0 0 10px var(--quantum-blue)); }
+        }
+
+        .particle-network {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .cyber-input {
+            background: transparent;
+            border: 1px solid var(--quantum-blue);
+            padding: 1rem;
+            clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
+            transition: all 0.3s ease;
+        }
+
+        .cyber-input:focus {
+            outline: none;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            background: rgba(0, 247, 255, 0.05);
+        }
+
+        .hologram-button {
+            background: linear-gradient(45deg, 
+                transparent 49%,
+                var(--quantum-blue) 50%,
+                transparent 51%
+            );
+            background-size: 300% 300%;
+            transition: all 0.6s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hologram-button:hover {
+            background-position: 100% 100%;
+            transform: scale(1.05);
+        }
+
+        .quantum-loader {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--quantum-blue);
+            animation: quantum-spin 2s infinite linear;
+            position: relative;
+        }
+
+        @keyframes quantum-spin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.5); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .datastream {
+            background: linear-gradient(to bottom,
+                transparent 0%,
+                rgba(0, 247, 255, 0.05) 10%,
+                transparent 100%
+            );
+            background-size: 100% 30px;
+            animation: datastream-flow 20s linear infinite;
+        }
+
+        @keyframes datastream-flow {
+            0% { background-position: 0 100vh; }
+            100% { background-position: 0 0; }
+        }
+    </style>
+</head>
+<body class="relative">
+    <div class="particle-network">
+        <div class="absolute w-full h-full bg-gradient-to-tr from-transparent to-cyan-500/10 animate-pulse"></div>
+    </div>
+
+    <main class="container mx-auto px-4 py-12 space-y-16">
+        <div class="text-center space-y-6">
+            <h1 class="text-6xl font-bold font-['Chakra+Petch']">
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-pink-400 neon-pulse">
+                    QuadFusion AI
+                </span>
+            </h1>
+            <div class="h-1 bg-gradient-to-r from-cyan-400/0 via-cyan-400/50 to-cyan-400/0"></div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- Input Panel -->
+            <div class="quantum-field p-8 space-y-8">
+                <div class="space-y-6">
+                    <h2 class="text-3xl font-['Chakra+Petch']">🧠📷 PATTERN PROCESSOR</h2>
+                    <div class="cyber-input relative group">
+                        <input type="file" id="quantumInput" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer" onchange="updateFileName()">
+                        <div class="flex flex-col items-center justify-center h-64 space-y-4">
+                            <div class="text-4xl">🔎</div>
+                            <div class="text-center">
+                                <div class="text-xl">DRAG YOUR IMAGE HERE</div>
+                                <div id="fileNameDisplay" class="text-sm opacity-50 mt-2 transition-all duration-300">
+                                    NO IMAGE SELECTED
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <button class="hologram-button p-4 font-['Chakra+Petch']" onclick="classifyImage()">
+                        INITIATE MEASUREMENT
+                    </button>
+                    <div class="quantum-loader"></div>
+                </div>
+            </div>
+
+            <!-- Results Display -->
+            <div class="quantum-field p-8 space-y-6">
+                <h2 class="text-3xl font-['Chakra+Petch']">PROBABILITY MATRIX</h2>
+                <div id="result" class="datastream min-h-[300px] p-6 space-y-4 font-mono">
+                    <div class="opacity-50">> SYSTEM READY</div>
+                    <div class="opacity-50">> AWAITING OBSERVATION</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hyperparameter Controls -->
+        <div class="quantum-field p-8 space-y-8">
+            <h2 class="text-3xl font-['Chakra+Petch']">QUANTUM ENTANGLEMENT CONTROLS</h2>
+            <div class="grid grid-cols-2 gap-8">
+                <div class="space-y-6">
+                    <div class="text-xl">POLARIZATION ANGLE</div>
+                    <input type="range" id="cSlider" min="0.1" max="10" step="0.1" value="1" 
+                           class="w-full bg-cyan-900/50 rounded-full h-2 appearance-none
+                                  [&::-webkit-slider-thumb]:size-4 [&::-webkit-slider-thumb]:bg-cyan-400
+                                  [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:clip-path-polygon(0 0, 100% 50%, 0 100%)">
+                    <div class="flex justify-between font-mono text-sm">
+                        <span>ENTANGLED</span>
+                        <span id="cValue" class="text-cyan-400">1.0</span>
+                        <span>COHERENT</span>
+                    </div>
+                </div>
+                
+                <div class="space-y-6">
+                    <div class="text-xl">SPIN STATES</div>
+                    <div class="grid grid-cols-3 gap-4">
+                        <button data-kernel="linear" class="kernel-btn cyber-input text-center py-3">↑↑</button>
+                        <button data-kernel="rbf" class="kernel-btn cyber-input text-center py-3">↑↓</button>
+                        <button data-kernel="poly" class="kernel-btn cyber-input text-center py-3">↓↓</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function createParticles() {
+            const container = document.querySelector('.particle-network');
+            for(let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'absolute w-0.5 h-0.5 bg-cyan-400/50';
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.animation = `particle-flow ${5 + Math.random() * 10}s infinite linear`;
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        function updateFileName() {
+            const input = document.getElementById('quantumInput');
+            const display = document.getElementById('fileNameDisplay');
+            
+            if(input.files.length > 0) {
+                const file = input.files[0];
+                display.innerHTML = `
+                    <span class="text-cyan-400">SELECTED VECTOR:</span><br>
+                    <span class="text-pink-400">${file.name}</span>
+                `;
+                display.classList.add('neon-pulse');
+            } else {
+                display.textContent = "NO VECTOR SELECTED";
+                display.classList.remove('neon-pulse');
+            }
+        }
+
+        function classifyImage() {
+            const file = document.getElementById('quantumInput').files[0];
+            if(!file) {
+                showQuantumAlert('QUANTUM VACUUM DETECTED - NO INPUT!', 'pink');
+                return;
+            }
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <div class="animate-pulse">> COLLAPSING WAVEFUNCTION...</div>
+                <div class="animate-pulse">> MEASURING EIGENSTATES...</div>
+            `;
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            fetch('/classify', {
+                method: 'POST',
+                body: formData
+            }).then(r => r.json())
+            .then(data => {
+                resultDiv.innerHTML = `
+                    <div class="text-cyan-400">> OBSERVED STATE:</div>
+                    <div class="pl-4 text-2xl font-['Chakra+Petch']">${data.result}</div>
+                    <div class="mt-4 space-y-2">
+                        ${data.top3.map(([name, prob]) => `
+                            <div class="flex items-center">
+                                <div class="w-8">${Math.random() > 0.5 ? '◼' : '◻'}</div>
+                                <div class="flex-1 bg-cyan-900/20 h-4">
+                                    <div class="bg-cyan-400 h-full" style="width: ${prob * 100}%"></div>
+                                </div>
+                                <div class="w-20 text-right">${(prob * 100).toFixed(1)}%</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            });
+        }
+
+        document.getElementById('cSlider').addEventListener('input', function() {
+            document.getElementById('cValue').textContent = this.value;
+            updateModel();
+        });
+
+        document.querySelectorAll('.kernel-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.kernel-btn').forEach(b => 
+                    b.classList.remove('bg-cyan-400', 'text-dark-matter'));
+                this.classList.add('bg-cyan-400', 'text-dark-matter');
+                updateModel();
+            });
+        });
+
+        function updateModel() {
+            const kernel = document.querySelector('.kernel-btn.bg-cyan-400').dataset.kernel;
+            const C = document.getElementById('cSlider').value;
+            
+            fetch('/update_model', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({kernel, C})
+            });
+        }
+
+        function showQuantumAlert(message, color='cyan') {
+            const alert = document.createElement('div');
+            alert.className = `fixed top-4 right-4 p-4 font-['Chakra+Petch'] 
+                border-2 border-${color}-400 bg-black/80 neon-pulse`;
+            alert.innerHTML = `⚡ ${message}`;
+            document.body.appendChild(alert);
+            setTimeout(() => alert.remove(), 3000);
+        }
+    </script>
+</body>
+</html>
